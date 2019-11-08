@@ -1,5 +1,10 @@
 import React, { Component } from 'react'
-import { View, BackHandler } from 'react-native'
+
+import * as RNLocalize from "react-native-localize"
+import i18n from "i18n-js"
+import memoize from "lodash.memoize" // Use for caching/memoize for better performance
+
+import { I18nManager, View, BackHandler } from 'react-native'
 import { connect } from 'react-redux'
 
 import { getDate } from '../slices/date'
@@ -29,9 +34,39 @@ const HOME_PAGE = 'Home'
 const CYCLE_DAY_PAGE = 'CycleDay'
 const SETTINGS_MENU_PAGE = 'SettingsMenu'
 
+const translationGetters = {
+  // lazy requires (metro bundler does not support symlinks)
+  en: () => require("../translations/en.json"),
+  ru: () => require("../translations/ru.json")
+}
+
+export const translate = memoize(
+  (key, config) => i18n.t(key, config),
+  (key, config) => (config ? key + JSON.stringify(config) : key)
+)
+
+const setI18nConfig = () => {
+  // fallback if no available language fits
+  const fallback = { languageTag: "en", isRTL: false }
+
+  const { languageTag, isRTL } =
+    RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) ||
+    fallback
+
+  // clear translation cache
+  translate.cache.clear()
+  // update layout direction
+  I18nManager.forceRTL(isRTL)
+
+  // set i18n-js config
+  i18n.translations = { [languageTag]: translationGetters[languageTag]() }
+  i18n.locale = languageTag
+}
+
 class App extends Component {
   constructor(props) {
     super(props)
+    setI18nConfig() // set initial config
     this.state = {
       currentPage: HOME_PAGE,
       cycleDay: {},
@@ -40,8 +75,18 @@ class App extends Component {
     setupNotifications(this.navigate)
   }
 
+  componentDidMount() {
+    RNLocalize.addEventListener("change", this.handleLocalizationChange)
+  }
+
   componentWillUnmount() {
     this.backHandler.remove()
+    RNLocalize.removeEventListener("change", this.handleLocalizationChange)
+  }
+
+  handleLocalizationChange = () => {
+    setI18nConfig()
+    this.forceUpdate()
   }
 
   navigate = (pageName, cycleDay) => {
@@ -121,7 +166,7 @@ class App extends Component {
         { hasDefaultHeader &&
           <Header
             handleBack={isSettingsSubView ? this.handleBackButtonPress : null}
-            title={title}
+            title={translate("title")}
           />
         }
 

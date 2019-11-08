@@ -19,6 +19,8 @@ import Button from './button'
 import { formatDateForShortText } from './helpers/format-date'
 import { getCycleDay } from '../db'
 
+import { translate } from './app'
+
 const IconText = ({ children, wrapperStyles }) => {
   return (
     <View style={[styles.homeIconTextWrapper, wrapperStyles]}>
@@ -93,7 +95,7 @@ class Home extends Component {
     const { navigate } = this.props
     const cycleDayMoreText = cycleDayNumber ?
       labels.cycleDayKnown(cycleDayNumber) :
-      labels.cycleDayNotEnoughInfo
+      translate("cycle-day-not-enough-info")
 
     const { statusText } = this.state
 
@@ -105,7 +107,7 @@ class Home extends Component {
             <HomeElement
               onPress={this.navigateToCycleDayView}
               buttonColor={ cycleDayColor }
-              buttonLabel={ labels.editToday }
+              buttonLabel={ translate("edit-today") }
             >
               <View>
                 <DripHomeIcon name="circle" size={80} color={cycleDayColor}/>
