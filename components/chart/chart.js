@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { View, FlatList, ActivityIndicator } from 'react-native'
 
 import NoData from './no-data'
-import AppLoadingView from '../app-loading'
+import AppLoadingView from '../common/app-loading'
 import YAxis from './y-axis'
 import nfpLines from './nfp-lines'
 import DayColumn from './day-column'
