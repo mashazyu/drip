@@ -49,7 +49,8 @@ const textSmall = {
 const button = {
   alignItems: 'center',
   justifyContent: 'center',
-  margin: Spacing.base
+  margin: Spacing.base,
+  minWidth: '20%'
 }
 
 const styles = StyleSheet.create({
