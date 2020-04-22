@@ -6,11 +6,11 @@ import AppText from './app-text'
 
 import { Colors, Spacing, Typography } from '../../styles/redesign'
 
-const Segment = ({ children, last, title }) => {
+const Segment = ({ children, last, style, title }) => {
   const containerStyle = last ? styles.containerLast : styles.container
 
   return (
-    <View style={containerStyle}>
+    <View style={[containerStyle, style]}>
       {title && <AppText style={styles.title}>{title}</AppText>}
       {children}
     </View>
@@ -20,6 +20,7 @@ const Segment = ({ children, last, title }) => {
 Segment.propTypes = {
   children: PropTypes.node,
   last: PropTypes.bool,
+  style: PropTypes.object,
   title: PropTypes.string
 }
 
