@@ -8,7 +8,7 @@ import YAxis from './y-axis'
 import nfpLines from './nfp-lines'
 import DayColumn from './day-column'
 import HorizontalGrid from './horizontal-grid'
-import AppText from '../app-text'
+import AppText from '../common/app-text'
 
 import { connect } from 'react-redux'
 import { navigate } from '../../slices/navigation'
