@@ -1,26 +1,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import { getTickPositions } from '../helpers/chart'
 
-import styles from './styles'
+import { Colors } from '../../styles/redesign'
+import { GRID_LINE_HORIZONTAL_WIDTH, YAXIS_WIDTH } from '../../config'
 
-const HorizontalGrid = ({ height, startPosition }) => {
+const HorizontalGrid = ({ height }) => {
   return getTickPositions(height).map(tick => {
     return (
-      <View
-        top={startPosition + tick}
-        {...styles.horizontalGrid}
-        key={tick}
-      />
+      <View key={tick} top={tick} {...styles.line}/>
     )
   })
 }
 
 HorizontalGrid.propTypes = {
-  height: PropTypes.number,
-  startPosition: PropTypes.number,
+  height: PropTypes.number
 }
+
+const styles = StyleSheet.create({
+  line: {
+    borderStyle: 'solid',
+    borderBottomColor: Colors.grey,
+    borderBottomWidth: GRID_LINE_HORIZONTAL_WIDTH,
+    left: YAXIS_WIDTH,
+    position:'absolute',
+    right: 0
+  }
+})
 
 export default HorizontalGrid
