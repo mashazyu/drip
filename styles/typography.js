@@ -20,7 +20,49 @@ const title = {
   marginVertical: Spacing.large
 }
 
+const accentText = {
+  fontFamily: fonts.bold,
+  textAlignVertical: 'center',
+  textTransform: 'uppercase'
+}
+
+const accentTextBig = {
+  ...accentText,
+  fontSize: 30,
+}
+
+const accentTextGiant = {
+  ...accentText,
+  fontSize: 50,
+}
+
+const accentTextHuge = {
+  ...accentText,
+  fontSize: sizes.huge,
+}
+
+const accentTextSmall = {
+  ...accentText,
+  fontSize: sizes.small
+}
+
 export default {
+  accentOrange: {
+    ...accentTextSmall,
+    color: Colors.orange
+  },
+  accentPurpleBig: {
+    ...accentTextBig,
+    color: Colors.purple
+  },
+  accentPurpleGiant: {
+    ...accentTextGiant,
+    color: Colors.purple
+  },
+  accentPurpleHuge: {
+    ...accentTextHuge,
+    color: Colors.purple
+  },
   mainText: {
     fontFamily: fonts.main,
     fontSize: sizes.base
