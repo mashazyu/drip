@@ -66,7 +66,6 @@ class App extends Component {
 
     const isSymptomEditView = isSymptomView(currentPage)
     const isSettingsSubView = isSettingsView(currentPage)
-    const isCycleDayView = currentPage === 'CycleDay'
 
     const headerProps = {
       title,
@@ -80,11 +79,7 @@ class App extends Component {
 
     return (
       <View style={{ flex: 1 }}>
-        {
-          !isSymptomEditView &&
-          !isCycleDayView &&
-          <Header { ...headerProps } />
-        }
+        { !isSymptomEditView && <Header { ...headerProps } /> }
 
         <Page { ...pageProps } />
 
