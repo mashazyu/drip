@@ -8,6 +8,7 @@ export const fonts = {
 
 export const sizes = {
   tiny: 7,
+  footnote: 10,
   small: 14,
   base: 18,
   subtitle: 22,
@@ -15,11 +16,6 @@ export const sizes = {
   big: 30,
   huge: 40,
   giant: 50
-}
-
-const title = {
-  color: Colors.purple,
-  marginVertical: Spacing.large
 }
 
 const accentText = {
@@ -48,6 +44,16 @@ const accentTextSmall = {
   fontSize: sizes.small
 }
 
+const title = {
+  color: Colors.purple,
+  marginVertical: Spacing.large
+}
+
+const label = {
+  fontSize: sizes.small,
+  textTransform: 'uppercase'
+}
+
 export default {
   accentOrange: {
     ...accentTextSmall,
@@ -68,6 +74,18 @@ export default {
   mainText: {
     fontFamily: fonts.main,
     fontSize: sizes.base
+  },
+  label: {
+    ...label
+  },
+  labelBold: {
+    color: Colors.greyDark,
+    fontWeight: 'bold',
+    ...label
+  },
+  labelLight: {
+    color: Colors.grey,
+    fontSize: sizes.footnote,
   },
   subtitle: {
     fontSize: sizes.subtitle,
