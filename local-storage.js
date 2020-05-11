@@ -1,15 +1,13 @@
 import { AsyncStorage } from 'react-native'
 import Observable from 'obv'
-import config from './config'
+import { TEMP_SCALE_MIN, TEMP_SCALE_MAX, TEMP_SCALE_UNITS } from './config'
 
 export const scaleObservable = Observable()
-setObvWithInitValue('tempScale', scaleObservable, {
-  min: config.temperatureScale.defaultLow,
-  max: config.temperatureScale.defaultHigh
-})
+setObvWithInitValue('tempScale',
+  scaleObservable, { min: TEMP_SCALE_MIN, max: TEMP_SCALE_MAX })
 
 export const unitObservable = Observable()
-unitObservable.set(config.temperatureScale.units)
+unitObservable.set(TEMP_SCALE_UNITS)
 scaleObservable((scale) => {
   const scaleRange = scale.max - scale.min
   if (scaleRange <= 2) {

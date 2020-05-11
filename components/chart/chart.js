@@ -23,8 +23,8 @@ import { makeColumnInfo, nfpLines } from '../helpers/chart'
 import {
   COLUMN_WIDTH,
   SYMPTOMS,
-  SYMPTOMHEIGHTRATIO,
-  XAXISHEIGHTRATIO
+  SYMPTOM_HEIGHT_RATIO,
+  XAXIS_HEIGHT_RATIO
 } from '../../config'
 import { shared } from '../../i18n/en/labels'
 import { Colors, Spacing } from '../../styles/redesign'
@@ -97,8 +97,8 @@ class CycleChart extends Component {
 
   reCalculateChartInfo = (nativeEvent) => {
     const { height, width } = nativeEvent.layout
-    const xAxisCoefficient = XAXISHEIGHTRATIO
-    const symptomCoefficient = SYMPTOMHEIGHTRATIO
+    const xAxisCoefficient = XAXIS_HEIGHT_RATIO
+    const symptomCoefficient = SYMPTOM_HEIGHT_RATIO
 
     this.xAxisHeight = height * xAxisCoefficient
     const remainingHeight = height - this.xAxisHeight
