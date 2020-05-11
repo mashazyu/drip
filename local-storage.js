@@ -12,7 +12,7 @@ export const unitObservable = Observable()
 unitObservable.set(config.temperatureScale.units)
 scaleObservable((scale) => {
   const scaleRange = scale.max - scale.min
-  if (scaleRange <= 3) {
+  if (scaleRange <= 2) {
     unitObservable.set(0.1)
   } else {
     unitObservable.set(0.5)
@@ -67,6 +67,15 @@ export async function getLicenseFlag() {
 
 export async function saveLicenseFlag() {
   await AsyncStorage.setItem('agreedToLicense', JSON.stringify(true))
+}
+
+export async function getChartFlag() {
+  const isFirstChartView = await AsyncStorage.getItem('isFirstChartView')
+  return isFirstChartView === null ? 'true' : isFirstChartView
+}
+
+export async function setChartFlag() {
+  await AsyncStorage.setItem('isFirstChartView', JSON.stringify(false))
 }
 
 async function setObvWithInitValue(key, obv, defaultValue) {
