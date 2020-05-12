@@ -12,6 +12,18 @@ function isNumber(val) {
   return typeof val === 'number'
 }
 
+export const symtomPage = {
+  bleeding: {
+    title: labels.bleeding.heaviness.explainer,
+    options: bleedingLabels,
+    excludeText: labels.bleeding.exclude.explainer
+  },
+  desire: {
+    title: labels.desire.explainer,
+    options: intensityLabels
+  }
+}
+
 const label = {
   bleeding: ({ value, exclude }) => {
     if (isNumber(value)) {
