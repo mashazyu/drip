@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import PropTypes from 'prop-types'
 
 import AppPage from '../common/app-page'
-import SymptomBox from './SymptomBox'
+import SymptomBox from './symptom-box'
 import SymptomPageTitle from './symptom-page-title'
 
 import { connect } from 'react-redux'
@@ -11,12 +11,13 @@ import { getDate, setDate } from '../../slices/date'
 import { navigate } from '../../slices/navigation'
 
 import cycleModule from '../../lib/cycle'
-import { getData, isDateInFuture } from '../helpers/cycle-day'
 import { dateToTitle } from '../helpers/format-date'
 import { getCycleDay } from '../../db'
+import { getData } from '../helpers/cycle-day'
 
 import { general as labels} from '../../i18n/en/cycle-day'
 import { Spacing } from '../../styles/redesign'
+import { SYMTOMS_WITH_TEMPERATURE } from '../../config'
 
 class CycleDayOverView extends Component {
 
@@ -30,7 +31,7 @@ class CycleDayOverView extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { cycleDay: getCycleDay(props.date) }
+    this.state = { cycleDay: getCycleDay(props.date), data: null }
   }
 
   updateCycleDay = (date) => {
@@ -41,18 +42,6 @@ class CycleDayOverView extends Component {
   render() {
     const { cycleDay } = this.state
     const { date } = this.props
-
-    const symptomBoxesList = [
-      'bleeding',
-      'temperature',
-      'mucus',
-      'cervix',
-      'desire',
-      'sex',
-      'pain',
-      'mood',
-      'note',
-    ]
 
     const { getCycleDayNumber } = cycleModule()
     const cycleDayNumber = getCycleDayNumber(date)
@@ -66,25 +55,20 @@ class CycleDayOverView extends Component {
           title={dateToTitle(date)}
         />
         <View style={styles.container}>
-          {symptomBoxesList.map(symptom => {
-            const symptomEditView =
-              `${symptom[0].toUpperCase() + symptom.substring(1)}EditView`
-            const data = cycleDay && cycleDay[symptom]
+          {SYMTOMS_WITH_TEMPERATURE.map(symptom => {
+            const symptomData = cycleDay && cycleDay[symptom]
               ? cycleDay[symptom] : null
-            const symptomDataToDisplay = getData(symptom, data)
-            const excluded = data !== null ? data.exclude : false
 
             return(
               <SymptomBox
-                disabled={isDateInFuture(date)}
-                excluded={excluded}
                 key={symptom}
-                onPress={() => this.props.navigate(symptomEditView)}
                 symptom={symptom}
-                symptomData={symptomDataToDisplay}
-              />)
-          })
-          }
+                symptomData={symptomData}
+                symptomDataToDisplay={getData(symptom, symptomData)}
+                updateCycleDayData={this.updateCycleDay}
+              />
+            )
+          })}
         </View>
       </AppPage>
     )
