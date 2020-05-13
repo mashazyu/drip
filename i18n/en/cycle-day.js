@@ -31,6 +31,7 @@ export const cervix = {
     categories: ['low', 'medium', 'high'],
     explainer: 'How high up in the vagina is the cervix?'
   },
+  excludeExplainer: "You can exclude this value if you don't want to use it for fertility detection.",
   actionHint: 'Choose values for at least "Opening" and "Firmness" to save.'
 }
 

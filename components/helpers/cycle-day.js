@@ -1,27 +1,144 @@
 import { LocalDate } from 'js-joda'
 
+import { saveSymptom } from '../../db'
+
 import * as labels from '../../i18n/en/cycle-day'
+import { getLabelsList } from './labels'
+
 const bleedingLabels = labels.bleeding.labels
 const intensityLabels = labels.intensity
 const sexLabels = labels.sex.categories
 const contraceptiveLabels = labels.contraceptives.categories
 const painLabels = labels.pain.categories
 const moodLabels = labels.mood.categories
+const cervixLabels = labels.cervix
+const mucusLabels = labels.mucus
+
+const hasValueToSave = (value) => typeof value === 'number'
+export const shouldShow = (value) => value !== null ? true : false
 
 function isNumber(val) {
   return typeof val === 'number'
 }
 
-export const symtomPage = {
+export const blank = {
   bleeding: {
-    title: labels.bleeding.heaviness.explainer,
-    options: bleedingLabels,
-    excludeText: labels.bleeding.exclude.explainer
+    exclude: false,
+    value: null
+  },
+  cervix: {
+    exclude: false,
+    firmness: null,
+    opening: null,
+    position: null,
   },
   desire: {
-    title: labels.desire.explainer,
-    options: intensityLabels
+    value: null
+  },
+  mucus: {
+    exclude: false,
+    feeling: null,
+    texture: null,
+    value: null
   }
+}
+
+export const symtomPage = {
+  bleeding: {
+    excludeText: labels.bleeding.exclude.explainer,
+    note: null,
+    selectBoxGroups: null,
+    selectTabGroups: [{
+      key: 'value',
+      options: getLabelsList(bleedingLabels),
+      title: labels.bleeding.heaviness.explainer,
+    }]
+  },
+  cervix: {
+    excludeText: cervixLabels.excludeExplainer,
+    note: null,
+    selectBoxGroups: null,
+    selectTabGroups: [
+      {
+        key: 'opening',
+        options: getLabelsList(cervixLabels.opening.categories),
+        title: cervixLabels.opening.explainer,
+      },
+      {
+        key: 'firmness',
+        options: getLabelsList(cervixLabels.firmness.categories),
+        title: cervixLabels.firmness.explainer,
+      },
+      {
+        key: 'position',
+        options: getLabelsList(cervixLabels.position.categories),
+        title: cervixLabels.position.explainer,
+      }
+    ]
+  },
+  desire: {
+    excludeText: null,
+    note: null,
+    selectBoxGroups: null,
+    selectTabGroups: [{
+      key: 'value',
+      options: getLabelsList(intensityLabels),
+      title: labels.desire.explainer
+    }]
+  },
+  mucus: {
+    excludeText: mucusLabels.excludeExplainer,
+    note: null,
+    selectBoxGroups: null,
+    selectTabGroups: [
+      {
+        key: 'feeling',
+        options: getLabelsList(mucusLabels.feeling.categories),
+        title: mucusLabels.feeling.explainer,
+      },
+      {
+        key: 'texture',
+        options: getLabelsList(mucusLabels.texture.categories),
+        title: mucusLabels.texture.explainer,
+      }
+    ]
+  },
+}
+
+export const save = {
+  bleeding: (data, date, shouldDeleteData) => {
+    const { exclude, value } = data
+    const isDataEntered = hasValueToSave(value)
+    const valuesToSave = shouldDeleteData || !isDataEntered
+      ? null : { value, exclude }
+
+    saveSymptom('bleeding', date, valuesToSave)
+  },
+  cervix: (data, date, shouldDeleteData) => {
+    const { opening, firmness, position, exclude } = data
+    const isDataEntered = ['opening', 'firmness', 'position'].some(
+      value => hasValueToSave(data[value]))
+    const valuesToSave = shouldDeleteData || !isDataEntered
+      ? null : { opening, firmness, position, exclude }
+
+    saveSymptom('cervix', date, valuesToSave)
+  },
+  desire: (data, date, shouldDeleteData) => {
+    const { value } = data
+    const valuesToSave = shouldDeleteData || !hasValueToSave(value)
+      ? null : { value }
+
+    saveSymptom('desire', date, valuesToSave)
+  },
+  mucus: (data, date, shouldDeleteData) => {
+    const { feeling, texture, exclude } = data
+    const isDataEntered = ['feeling', 'texture'].some(
+      value => hasValueToSave(data[value]))
+    const valuesToSave = shouldDeleteData || !isDataEntered
+      ? null : { feeling, texture, exclude }
+
+    saveSymptom('mucus', date, valuesToSave)
+  },
 }
 
 const label = {

@@ -11,9 +11,7 @@ import SelectTabGroup from './select-tab-group'
 
 import { connect } from 'react-redux'
 import { getDate } from '../../slices/date'
-import { symtomPage } from '../helpers/cycle-day'
-import { saveSymptom } from '../../db'
-import { getLabelsList } from '../helpers/labels'
+import { blank, save, shouldShow,symtomPage } from '../helpers/cycle-day'
 
 import info from '../../i18n/en/symptom-info'
 import { Containers, Fonts, Sizes } from '../../styles/redesign'
@@ -31,11 +29,22 @@ class SymptomEditView extends Component {
     super(props)
 
     const { symptomData, symptom } = this.props
-    const defaultSymptomData = { value: null, exclude: false }
-    const data = symptomData ? symptomData : defaultSymptomData
-    const shouldShowExclude = symtomPage[symptom].excludeText ? true : false
+    const data = symptomData ? symptomData : blank[symptom]
 
-    this.state = { ...data, shouldShowInfo: false, shouldShowExclude }
+    const symptomConfig = symtomPage[symptom]
+    const shouldShowExclude = shouldShow(symptomConfig.excludeText)
+    const shouldShowNote = shouldShow(symptomConfig.note)
+    const shouldBoxGroup = shouldShow(symptomConfig.selectBoxGroups)
+    const shouldTabGroup = shouldShow(symptomConfig.selectTabGroups)
+
+    this.state = {
+      data,
+      shouldShowExclude,
+      shouldShowInfo: false,
+      shouldShowNote,
+      shouldBoxGroup,
+      shouldTabGroup
+    }
   }
 
   componentDidUpdate() {
@@ -43,7 +52,14 @@ class SymptomEditView extends Component {
   }
 
   onExcludeToggle = () => {
-    this.setState({ exclude: !this.state.exclude })
+    let data = JSON.parse(JSON.stringify(this.state.data))
+    Object.assign(data, { exclude: !data.exclude })
+
+    this.setState({ data })
+  }
+
+  onPressLearnMore = () => {
+    this.setState({ shouldShowInfo: !this.state.shouldShowInfo })
   }
 
   onRemove = () => {
@@ -56,26 +72,27 @@ class SymptomEditView extends Component {
     this.props.onClose()
   }
 
-  onPressLearnMore = () => {
-    this.setState({ shouldShowInfo: !this.state.shouldShowInfo })
+  onSelectTab = (group, value) => {
+    let data = JSON.parse(JSON.stringify(this.state.data))
+    Object.assign(data, { [group.key]: value })
+
+    this.setState({ data })
   }
 
   saveData = (shouldDeleteData) => {
     const { date, symptom } = this.props
-    const { exclude, value, shouldShowExclude } = this.state
-    const hasValueToSave = typeof value === 'number'
-    const valuesToSave = shouldDeleteData || !hasValueToSave ? null : { value }
-    if (shouldShowExclude) {
-      valuesToSave.exclude = exclude ? true : false
-    }
+    const { data } = this.state
 
-    saveSymptom(symptom, date, valuesToSave)
+    save[symptom](data, date, shouldDeleteData)
   }
 
   render() {
     const { symptom, onClose } = this.props
-    const { exclude, shouldShowExclude, shouldShowInfo } = this.state
-    const labels = getLabelsList(symtomPage[symptom].options)
+    const { data,
+      shouldShowExclude,
+      shouldShowInfo,
+      shouldTabGroup
+    } = this.state
     const iconName = shouldShowInfo ? "chevron-down" : "chevron-up"
 
     return (
@@ -84,20 +101,25 @@ class SymptomEditView extends Component {
           style={styles.modalWindow}
           contentContainerStyle={styles.modalContainer}
         >
-          <Segment>
-            <AppText style={styles.title}>{symtomPage[symptom].title}</AppText>
-            <SelectTabGroup
-              buttons={labels}
-              activeButton={this.state.value}
-              onSelect={value => this.setState({ value })}
-            />
-          </Segment>
+          {shouldTabGroup && symtomPage[symptom].selectTabGroups.map(group => {
+            return (
+              <Segment key={group.key}>
+                <AppText style={styles.title}>{group.title}</AppText>
+                <SelectTabGroup
+                  activeButton={data[group.key]}
+                  buttons={group.options}
+                  onSelect={value => this.onSelectTab(group, value)}
+                />
+              </Segment>
+            )
+          })
+          }
           {shouldShowExclude &&
             <Segment>
               <AppSwitch
                 onToggle={this.onExcludeToggle}
                 text={symtomPage[symptom].excludeText}
-                value={exclude}
+                value={data.exclude}
               />
             </Segment>
           }
