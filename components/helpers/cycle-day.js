@@ -13,6 +13,7 @@ const painLabels = labels.pain.categories
 const moodLabels = labels.mood.categories
 const cervixLabels = labels.cervix
 const mucusLabels = labels.mucus
+const noteDescription = labels.noteExplainer
 
 const hasValueToSave = (value) => typeof value === 'number'
 export const shouldShow = (value) => value !== null ? true : false
@@ -40,7 +41,10 @@ export const blank = {
     feeling: null,
     texture: null,
     value: null
-  }
+  },
+  note: {
+    value: null
+  },
 }
 
 export const symtomPage = {
@@ -103,6 +107,12 @@ export const symtomPage = {
       }
     ]
   },
+  note: {
+    excludeText: null,
+    note: noteDescription,
+    selectBoxGroups: null,
+    selectTabGroups: null
+  },
 }
 
 export const save = {
@@ -138,6 +148,13 @@ export const save = {
       ? null : { feeling, texture, exclude }
 
     saveSymptom('mucus', date, valuesToSave)
+  },
+  note: (data, date, shouldDeleteData) => {
+    const { value } = data
+    const isValidData = value !== null && value !== ''
+    const valuesToSave = shouldDeleteData || !isValidData ? null : { value }
+
+    saveSymptom('note', date, valuesToSave)
   },
 }
 
