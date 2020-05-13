@@ -5,6 +5,7 @@ import { ScrollView, StyleSheet, View } from 'react-native'
 import AppModal from '../common/app-modal'
 import AppSwitch from '../common/app-switch'
 import AppText from '../common/app-text'
+import AppTextInput from '../common/app-text-input'
 import Button from '../common/button'
 import Segment from '../common/segment'
 import SelectTabGroup from './select-tab-group'
@@ -13,6 +14,7 @@ import { connect } from 'react-redux'
 import { getDate } from '../../slices/date'
 import { blank, save, shouldShow,symtomPage } from '../helpers/cycle-day'
 
+import { shared as sharedLabels } from '../../i18n/en/labels'
 import info from '../../i18n/en/symptom-info'
 import { Containers, Fonts, Sizes } from '../../styles/redesign'
 
@@ -49,6 +51,13 @@ class SymptomEditView extends Component {
 
   componentDidUpdate() {
     this.saveData()
+  }
+
+  onEditNote = (value) => {
+    let data = JSON.parse(JSON.stringify(this.state.data))
+    Object.assign(data, { value })
+
+    this.setState({ data })
   }
 
   onExcludeToggle = () => {
@@ -91,6 +100,7 @@ class SymptomEditView extends Component {
     const { data,
       shouldShowExclude,
       shouldShowInfo,
+      shouldShowNote,
       shouldTabGroup
     } = this.state
     const iconName = shouldShowInfo ? "chevron-down" : "chevron-up"
@@ -120,6 +130,19 @@ class SymptomEditView extends Component {
                 onToggle={this.onExcludeToggle}
                 text={symtomPage[symptom].excludeText}
                 value={data.exclude}
+              />
+            </Segment>
+          }
+          {shouldShowNote &&
+            <Segment>
+              <AppText style={styles.title}>{symtomPage[symptom].note}</AppText>
+              <AppTextInput
+                autoFocus={true}
+                multiline={true}
+                placeholder={sharedLabels.enter}
+                onChangeText={this.onEditNote}
+                value={data.value !== null ? data.value : ''}
+                testID='noteInput'
               />
             </Segment>
           }
