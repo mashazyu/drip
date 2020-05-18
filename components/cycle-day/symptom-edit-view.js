@@ -8,6 +8,7 @@ import AppText from '../common/app-text'
 import AppTextInput from '../common/app-text-input'
 import Button from '../common/button'
 import Segment from '../common/segment'
+import SelectBoxGroup from './select-box-group'
 import SelectTabGroup from './select-tab-group'
 
 import { connect } from 'react-redux'
@@ -81,6 +82,28 @@ class SymptomEditView extends Component {
     this.props.onClose()
   }
 
+  onSelectBox = (key) => {
+    let data = JSON.parse(JSON.stringify(this.state.data))
+    if (key === "other") {
+      Object.assign(data, {
+        note: null,
+        [key]: !this.state.data[key]
+      })
+    } else {
+      Object.assign(data, { [key]: !this.state.data[key] })
+    }
+
+    this.setState({ data })
+  }
+
+  onSelectBoxNote= (value) => {
+    let data = JSON.parse(JSON.stringify(this.state.data))
+    Object.assign(data, { note: value !== '' ? value : null })
+
+    this.setState({ data })
+  }
+
+
   onSelectTab = (group, value) => {
     let data = JSON.parse(JSON.stringify(this.state.data))
     Object.assign(data, { [group.key]: value })
@@ -101,6 +124,7 @@ class SymptomEditView extends Component {
       shouldShowExclude,
       shouldShowInfo,
       shouldShowNote,
+      shouldBoxGroup,
       shouldTabGroup
     } = this.state
     const iconName = shouldShowInfo ? "chevron-down" : "chevron-up"
@@ -120,6 +144,30 @@ class SymptomEditView extends Component {
                   buttons={group.options}
                   onSelect={value => this.onSelectTab(group, value)}
                 />
+              </Segment>
+            )
+          })
+          }
+          {shouldBoxGroup && symtomPage[symptom].selectBoxGroups.map(group => {
+            const isOtherSelected = data['other'] !== null
+
+            return (
+              <Segment key={group.key}>
+                <AppText style={styles.title}>{group.title}</AppText>
+                <SelectBoxGroup
+                  labels={group.options}
+                  onSelect={value => this.onSelectBox(value)}
+                  optionsState={data}
+                />
+                {isOtherSelected &&
+                  <AppTextInput
+                    autoFocus={true}
+                    multiline={true}
+                    placeholder={sharedLabels.enter}
+                    value={data.note}
+                    onChangeText={value => this.onSelectBoxNote(value)}
+                  />
+                }
               </Segment>
             )
           })
