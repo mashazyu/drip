@@ -15,12 +15,8 @@ const cervixLabels = labels.cervix
 const mucusLabels = labels.mucus
 const noteDescription = labels.noteExplainer
 
-const hasValueToSave = (value) => typeof value === 'number'
+const isNumber = (value) => typeof value === 'number'
 export const shouldShow = (value) => value !== null ? true : false
-
-function isNumber(val) {
-  return typeof val === 'number'
-}
 
 export const blank = {
   bleeding: {
@@ -36,6 +32,19 @@ export const blank = {
   desire: {
     value: null
   },
+  mood:{
+    happy: null,
+    sad: null,
+    stressed: null,
+    balanced: null,
+    fine: null,
+    anxious: null,
+    energetic: null,
+    fatigue: null,
+    angry: null,
+    other: null,
+    note: null
+  },
   mucus: {
     exclude: false,
     feeling: null,
@@ -45,6 +54,31 @@ export const blank = {
   note: {
     value: null
   },
+  pain: {
+    cramps: null,
+    ovulationPain: null,
+    headache: null,
+    backache: null,
+    nausea: null,
+    tenderBreasts: null,
+    migraine: null,
+    other: null,
+    note: null
+  },
+  sex: {
+    solo: null,
+    partner: null,
+    condom: null,
+    pill: null,
+    iud: null,
+    patch: null,
+    ring: null,
+    implant: null,
+    diaphragm: null,
+    none: null,
+    other: null,
+    note: null
+  }
 }
 
 export const symtomPage = {
@@ -107,18 +141,55 @@ export const symtomPage = {
       }
     ]
   },
+  mood: {
+    excludeText: null,
+    note: null,
+    selectBoxGroups: [{
+      key: 'mood',
+      options: moodLabels,
+      title: labels.mood.explainer
+    }],
+    selectTabGroups: null
+  },
   note: {
     excludeText: null,
     note: noteDescription,
     selectBoxGroups: null,
     selectTabGroups: null
   },
+  pain: {
+    excludeText: null,
+    note: null,
+    selectBoxGroups: [{
+      key: 'pain',
+      options: painLabels,
+      title: labels.pain.explainer
+    }],
+    selectTabGroups: null
+  },
+  sex: {
+    excludeText: null,
+    note: null,
+    selectBoxGroups: [
+      {
+        key: 'sex',
+        options: sexLabels,
+        title: labels.sex.explainer,
+      },
+      {
+        key: 'contraceptives',
+        options: contraceptiveLabels,
+        title: labels.contraceptives.explainer,
+      }
+    ],
+    selectTabGroups: null
+  }
 }
 
 export const save = {
   bleeding: (data, date, shouldDeleteData) => {
     const { exclude, value } = data
-    const isDataEntered = hasValueToSave(value)
+    const isDataEntered = isNumber(value)
     const valuesToSave = shouldDeleteData || !isDataEntered
       ? null : { value, exclude }
 
@@ -127,7 +198,7 @@ export const save = {
   cervix: (data, date, shouldDeleteData) => {
     const { opening, firmness, position, exclude } = data
     const isDataEntered = ['opening', 'firmness', 'position'].some(
-      value => hasValueToSave(data[value]))
+      value => isNumber(data[value]))
     const valuesToSave = shouldDeleteData || !isDataEntered
       ? null : { opening, firmness, position, exclude }
 
@@ -135,15 +206,18 @@ export const save = {
   },
   desire: (data, date, shouldDeleteData) => {
     const { value } = data
-    const valuesToSave = shouldDeleteData || !hasValueToSave(value)
+    const valuesToSave = shouldDeleteData || !isNumber(value)
       ? null : { value }
 
     saveSymptom('desire', date, valuesToSave)
   },
+  mood: (data, date, shouldDeleteData) => {
+    saveBoxSymptom(data, date, shouldDeleteData, 'mood')
+  },
   mucus: (data, date, shouldDeleteData) => {
     const { feeling, texture, exclude } = data
     const isDataEntered = ['feeling', 'texture'].some(
-      value => hasValueToSave(data[value]))
+      value => isNumber(data[value]))
     const valuesToSave = shouldDeleteData || !isDataEntered
       ? null : { feeling, texture, exclude }
 
@@ -156,6 +230,20 @@ export const save = {
 
     saveSymptom('note', date, valuesToSave)
   },
+  pain: (data, date, shouldDeleteData) => {
+    saveBoxSymptom(data, date, shouldDeleteData, 'pain')
+  },
+  sex: (data, date, shouldDeleteData) => {
+    saveBoxSymptom(data, date, shouldDeleteData, 'sex')
+  }
+}
+
+const saveBoxSymptom = (data, date, shouldDeleteData, symptom) => {
+  const isDataEntered = Object.keys(data).some(key => data[key] !== null)
+  const valuesToSave = shouldDeleteData || !isDataEntered
+    ? null : data
+
+  saveSymptom(symptom, date, valuesToSave)
 }
 
 const label = {
