@@ -15,7 +15,7 @@ import cycleModule from '../lib/cycle'
 import { getFertilityStatusForDay } from '../lib/sympto-adapter'
 import { determinePredictionText, dateEnding } from './helpers/home'
 
-import { Colors, Fonts, Sizes, Spacing } from '../styles/redesign'
+import { Colors, Fonts, Sizes, Spacing } from '../styles'
 import { homeRedesign as labels, home as cycle } from '../i18n/en/labels'
 
 class Home extends Component {

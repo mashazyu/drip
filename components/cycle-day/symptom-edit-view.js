@@ -19,7 +19,7 @@ import { blank, save, shouldShow, symtomPage } from '../helpers/cycle-day'
 
 import { shared as sharedLabels } from '../../i18n/en/labels'
 import info from '../../i18n/en/symptom-info'
-import { Colors, Containers, Sizes, Spacing } from '../../styles/redesign'
+import { Colors, Containers, Sizes, Spacing } from '../../styles'
 
 class SymptomEditView extends Component {
 

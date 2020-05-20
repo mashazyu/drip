@@ -1,6 +1,6 @@
 import { LocalDate } from 'js-joda'
 
-import { Colors, Fonts, Sizes } from '../../styles/redesign'
+import { Colors, Fonts, Sizes } from '../../styles'
 
 const { shades } = Colors.iconColors.bleeding
 
