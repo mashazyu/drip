@@ -16,7 +16,7 @@ import { getFertilityStatusForDay } from '../lib/sympto-adapter'
 import { determinePredictionText, dateEnding } from './helpers/home'
 
 import { Colors, Fonts, Sizes, Spacing } from '../styles'
-import { homeRedesign as labels, home as cycle } from '../i18n/en/labels'
+import { home as labels } from '../i18n/en/labels'
 
 class Home extends Component {
 
@@ -36,7 +36,7 @@ class Home extends Component {
       getFertilityStatusForDay(this.todayDateString)
     const prediction = getPredictedMenses()
 
-    this.cycleDayText = !this.cycleDayNumber ? cycle.cycleDayNotEnoughInfo
+    this.cycleDayText = !this.cycleDayNumber ? labels.cycleDayNotEnoughInfo
       : `${this.cycleDayNumber}${dateEnding[this.cycleDayNumber] || dateEnding['default']}`
     this.phase = phase
     this.phaseText = !phase ? statusText
