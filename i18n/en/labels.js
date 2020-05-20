@@ -29,6 +29,8 @@ export const shared = {
   noTemperatureWarning: 'You haven\'t entered any temperature data yet.',
   noDataButtonText: 'Start entering data now',
   enter: 'Enter',
+  remove: 'Remove',
+  learnMore: 'Learn more'
 }
 
 export const headerTitles = {
