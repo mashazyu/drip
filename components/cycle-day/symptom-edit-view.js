@@ -148,8 +148,9 @@ class SymptomEditView extends Component {
     return (
       <AppModal onClose={onClose}>
         <ScrollView
-          style={styles.modalWindow}
           contentContainerStyle={styles.modalContainer}
+          pagingEnabled={true}
+          style={styles.modalWindow}
         >
           <View style={styles.headerContainer}>
             <CloseIcon onClose={onClose} />
@@ -186,7 +187,6 @@ class SymptomEditView extends Component {
                 />
                 {isOtherSelected &&
                   <AppTextInput
-                    autoFocus={true}
                     multiline={true}
                     placeholder={sharedLabels.enter}
                     value={data.note}
@@ -208,7 +208,7 @@ class SymptomEditView extends Component {
           }
           {shouldShowNote &&
             <Segment>
-              <AppText style={styles.title}>{symtomPage[symptom].note}</AppText>
+              <AppText>{symtomPage[symptom].note}</AppText>
               <AppTextInput
                 multiline={true}
                 placeholder={sharedLabels.enter}
@@ -255,12 +255,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     marginVertical: Sizes.huge * 2,
+    minHeight: '40%',
     height: '70%',
     position: 'absolute'
   },
   title: {
-    fontSize: Sizes.subtitle,
-    fontFamily: Fonts.bold
+    fontSize: Sizes.subtitle
   }
 })
 

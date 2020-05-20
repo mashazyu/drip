@@ -86,7 +86,7 @@ class Temperature extends Component {
     return (
       <React.Fragment>
         <Segment>
-          <AppText>{labels.temperature.explainer}</AppText>
+          <AppText style={styles.title}>{labels.temperature.explainer}</AppText>
           <View style={styles.container}>
             <AppTextInput
               value={temperatureToShow === null ? '' : temperatureToShow}
@@ -107,15 +107,15 @@ class Temperature extends Component {
           }
         </Segment>
         <Segment>
-          <AppText>{labels.time}</AppText>
+          <AppText style={styles.title}>{labels.time}</AppText>
           <AppTextInput
             onFocus={this.onShowTimePicker}
-            value={time}
             testID='timeInput'
+            value={time}
           />
           <DateTimePicker
-            mode="time"
             isVisible={this.state.isTimePickerVisible}
+            mode="time"
             onConfirm={this.setTime}
             onCancel={this.onCancelTimePicker}
           />
@@ -135,6 +135,9 @@ const styles = StyleSheet.create({
   },
   hintContainer: {
     marginVertical: Spacing.tiny
+  },
+  title: {
+    fontSize: Sizes.subtitle
   }
 })
 
