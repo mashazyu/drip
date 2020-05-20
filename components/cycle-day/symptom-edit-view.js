@@ -7,6 +7,7 @@ import AppSwitch from '../common/app-switch'
 import AppText from '../common/app-text'
 import AppTextInput from '../common/app-text-input'
 import Button from '../common/button'
+import CloseIcon from '../common/close-icon'
 import Segment from '../common/segment'
 import SelectBoxGroup from './select-box-group'
 import SelectTabGroup from './select-tab-group'
@@ -150,6 +151,9 @@ class SymptomEditView extends Component {
           style={styles.modalWindow}
           contentContainerStyle={styles.modalContainer}
         >
+          <View style={styles.headerContainer}>
+            <CloseIcon onClose={onClose} />
+          </View>
           {symptom === 'temperature' &&
             <Temperature
               data={data}
@@ -237,6 +241,11 @@ class SymptomEditView extends Component {
 const styles = StyleSheet.create({
   buttonsContainer: {
     ...Containers.rowContainer
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingVertical: Sizes.tiny,
   },
   modalContainer: {
     flexGrow: 1,
