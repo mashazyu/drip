@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { StyleSheet, View } from 'react-native'
 import Slider from '@ptomasroos/react-native-multi-slider'
 
-import alertError from '../shared/alert-error'
+import alertError from '../common/alert-error'
 import SliderLabel from './slider-label'
 
 import { scaleObservable, saveTempScale } from '../../../local-storage'

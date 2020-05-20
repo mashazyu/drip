@@ -5,8 +5,8 @@ import PropTypes from 'prop-types'
 
 import Button from '../../common/button'
 
-import ConfirmWithPassword from '../shared/confirm-with-password'
-import alertError from '../shared/alert-error'
+import ConfirmWithPassword from '../common/confirm-with-password'
+import alertError from '../common/alert-error'
 
 import { clearDb, isDbEmpty } from '../../../db'
 import { hasEncryptionObservable } from '../../../local-storage'
