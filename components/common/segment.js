@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native'
 
 import AppText from './app-text'
 
-import { Colors, Spacing, Typography } from '../../styles/redesign'
+import { Colors, Spacing, Typography } from '../../styles'
 
 const Segment = ({ children, last, title }) => {
   const containerStyle = last ? styles.containerLast : styles.container
