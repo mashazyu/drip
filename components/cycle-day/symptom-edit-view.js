@@ -10,6 +10,7 @@ import Button from '../common/button'
 import Segment from '../common/segment'
 import SelectBoxGroup from './select-box-group'
 import SelectTabGroup from './select-tab-group'
+import Temperature from './temperature'
 
 import { connect } from 'react-redux'
 import { getDate } from '../../slices/date'
@@ -54,9 +55,15 @@ class SymptomEditView extends Component {
     this.saveData()
   }
 
-  onEditNote = (value) => {
+  onEditNote = (note) => {
     let data = JSON.parse(JSON.stringify(this.state.data))
-    Object.assign(data, { value })
+    const { symptom } = this.props
+
+    if (symptom === 'note') {
+      Object.assign(data, { value: note })
+    } else {
+      Object.assign(data, { note })
+    }
 
     this.setState({ data })
   }
@@ -82,6 +89,15 @@ class SymptomEditView extends Component {
     this.props.onClose()
   }
 
+  onSaveTemperature = (value, field) => {
+    let data = JSON.parse(JSON.stringify(this.state.data))
+    const dataToSave = field === 'value'
+      ? { [field]: Number(value) } : { [field]: value }
+    Object.assign(data, { ...dataToSave })
+
+    this.setState({ data })
+  }
+
   onSelectBox = (key) => {
     let data = JSON.parse(JSON.stringify(this.state.data))
     if (key === "other") {
@@ -103,7 +119,6 @@ class SymptomEditView extends Component {
     this.setState({ data })
   }
 
-
   onSelectTab = (group, value) => {
     let data = JSON.parse(JSON.stringify(this.state.data))
     Object.assign(data, { [group.key]: value })
@@ -114,12 +129,11 @@ class SymptomEditView extends Component {
   saveData = (shouldDeleteData) => {
     const { date, symptom } = this.props
     const { data } = this.state
-
     save[symptom](data, date, shouldDeleteData)
   }
 
   render() {
-    const { symptom, onClose } = this.props
+    const { onClose, symptom } = this.props
     const { data,
       shouldShowExclude,
       shouldShowInfo,
@@ -128,6 +142,7 @@ class SymptomEditView extends Component {
       shouldTabGroup
     } = this.state
     const iconName = shouldShowInfo ? "chevron-down" : "chevron-up"
+    const noteText = symptom === 'note' ? data.value : data.note
 
     return (
       <AppModal onClose={onClose}>
@@ -135,6 +150,12 @@ class SymptomEditView extends Component {
           style={styles.modalWindow}
           contentContainerStyle={styles.modalContainer}
         >
+          {symptom === 'temperature' &&
+            <Temperature
+              data={data}
+              save={(value, field) => this.onSaveTemperature(value, field)}
+            />
+          }
           {shouldTabGroup && symtomPage[symptom].selectTabGroups.map(group => {
             return (
               <Segment key={group.key}>
@@ -185,11 +206,10 @@ class SymptomEditView extends Component {
             <Segment>
               <AppText style={styles.title}>{symtomPage[symptom].note}</AppText>
               <AppTextInput
-                autoFocus={true}
                 multiline={true}
                 placeholder={sharedLabels.enter}
                 onChangeText={this.onEditNote}
-                value={data.value !== null ? data.value : ''}
+                value={noteText !== null ? noteText : ''}
                 testID='noteInput'
               />
             </Segment>

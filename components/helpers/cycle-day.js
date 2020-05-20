@@ -1,22 +1,54 @@
-import { LocalDate } from 'js-joda'
+import { ChronoUnit, LocalDate, LocalTime } from 'js-joda'
 
-import { saveSymptom } from '../../db'
+import { getPreviousTemperature, saveSymptom } from '../../db'
+import { scaleObservable } from '../../local-storage'
 
 import * as labels from '../../i18n/en/cycle-day'
 import { getLabelsList } from './labels'
+import { TEMP_MAX, TEMP_MIN } from '../../config'
 
 const bleedingLabels = labels.bleeding.labels
-const intensityLabels = labels.intensity
-const sexLabels = labels.sex.categories
-const contraceptiveLabels = labels.contraceptives.categories
-const painLabels = labels.pain.categories
-const moodLabels = labels.mood.categories
 const cervixLabels = labels.cervix
+const contraceptiveLabels = labels.contraceptives.categories
+const intensityLabels = labels.intensity
+const moodLabels = labels.mood.categories
 const mucusLabels = labels.mucus
 const noteDescription = labels.noteExplainer
+const painLabels = labels.pain.categories
+const sexLabels = labels.sex.categories
+const temperatureLabels = labels.temperature
+
+const minutes = ChronoUnit.MINUTES
 
 const isNumber = (value) => typeof value === 'number'
 export const shouldShow = (value) => value !== null ? true : false
+
+export const isPreviousTemperature = (temperature) => {
+  const previousTemperature = getPreviousTemperature(temperature)
+  const shouldShowSuggestion = previousTemperature ? true : false
+  const suggestedTemperature = previousTemperature ?
+    previousTemperature.toString() : null
+
+  return { shouldShowSuggestion, suggestedTemperature }
+}
+
+export const isTemperatureOutOfRange = (temperature) => {
+  if (temperature === '') return null
+
+  const value = Number(temperature)
+  const range = { min: TEMP_MIN, max: TEMP_MAX }
+  const scale = scaleObservable.value
+
+  let warningMsg = null
+
+  if (value < range.min || value > range.max) {
+    warningMsg = labels.temperature.outOfAbsoluteRangeWarning
+  } else if (value < scale.min || value > scale.max) {
+    warningMsg = labels.temperature.outOfRangeWarning
+  }
+
+  return warningMsg
+}
 
 export const blank = {
   bleeding: {
@@ -78,6 +110,12 @@ export const blank = {
     none: null,
     other: null,
     note: null
+  },
+  temperature: {
+    exclude: false,
+    note: null,
+    time: LocalTime.now().truncatedTo(minutes).toString(),
+    value: null
   }
 }
 
@@ -183,6 +221,12 @@ export const symtomPage = {
       }
     ],
     selectTabGroups: null
+  },
+  temperature: {
+    excludeText: temperatureLabels.exclude.explainer,
+    note: temperatureLabels.note.explainer,
+    selectBoxGroups: null,
+    selectTabGroups: null
   }
 }
 
@@ -235,6 +279,21 @@ export const save = {
   },
   sex: (data, date, shouldDeleteData) => {
     saveBoxSymptom(data, date, shouldDeleteData, 'sex')
+  },
+  temperature: (data, date, shouldDeleteData) => {
+    const { exclude, note, time, value } = data
+    const valuesToSave = {
+      exclude,
+      note,
+      time,
+      value: Number(value)
+    }
+
+    saveSymptom(
+      'temperature',
+      date,
+      (shouldDeleteData || value === null) ? null : valuesToSave
+    )
   }
 }
 
