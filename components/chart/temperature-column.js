@@ -7,7 +7,7 @@ import { Surface , Path } from 'react-native/Libraries/ART/ReactNativeART'
 import ChartLine from './chart-line'
 import DotAndLine from './dot-and-line'
 
-import { COLUMN_WIDTH, STROKE_WIDTH } from '../../config'
+import { CHART_COLUMN_WIDTH, CHART_STROKE_WIDTH } from '../../config'
 
 const TemperatureColumn = ({
   horizontalLinePosition,
@@ -15,11 +15,11 @@ const TemperatureColumn = ({
   data,
   columnHeight
 }) => {
-  const x = STROKE_WIDTH / 2
+  const x = CHART_STROKE_WIDTH / 2
 
   return (
     <Surface
-      width={COLUMN_WIDTH}
+      width={CHART_COLUMN_WIDTH}
       height={columnHeight}
       style={styles.container}
     >
@@ -29,7 +29,7 @@ const TemperatureColumn = ({
       {horizontalLinePosition && <ChartLine
         path={new Path()
           .moveTo(0, horizontalLinePosition)
-          .lineTo(COLUMN_WIDTH, horizontalLinePosition)
+          .lineTo(CHART_COLUMN_WIDTH, horizontalLinePosition)
         }
         isNfpLine={true}
         key='ltl'

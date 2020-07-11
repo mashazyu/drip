@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native'
 import { getTickPositions } from '../helpers/chart'
 
 import { Colors } from '../../styles/redesign'
-import { GRID_LINE_HORIZONTAL_WIDTH, YAXIS_WIDTH } from '../../config'
+import { CHART_GRID_LINE_HORIZONTAL_WIDTH, CHART_YAXIS_WIDTH } from '../../config'
 
 const HorizontalGrid = ({ height }) => {
   return getTickPositions(height).map(tick => {
@@ -23,8 +23,8 @@ const styles = StyleSheet.create({
   line: {
     borderStyle: 'solid',
     borderBottomColor: Colors.grey,
-    borderBottomWidth: GRID_LINE_HORIZONTAL_WIDTH,
-    left: YAXIS_WIDTH,
+    borderBottomWidth: CHART_GRID_LINE_HORIZONTAL_WIDTH,
+    left: CHART_YAXIS_WIDTH,
     position:'absolute',
     right: 0
   }

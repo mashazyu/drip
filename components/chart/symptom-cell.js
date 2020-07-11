@@ -4,9 +4,9 @@ import { StyleSheet, View } from 'react-native'
 
 import { Colors, Containers } from '../../styles/redesign'
 import {
-  COLUMN_WIDTH,
-  DOT_RADIUS,
-  GRID_LINE_HORIZONTAL_WIDTH
+  CHART_COLUMN_WIDTH,
+  CHART_DOT_RADIUS,
+  CHART_GRID_LINE_HORIZONTAL_WIDTH
 } from '../../config'
 
 const SymptomCell = ({
@@ -17,7 +17,7 @@ const SymptomCell = ({
 }) => {
 
   const shouldDrawDot = symptomValue !== false
-  const styleCell = [styles.cell, { height, width: COLUMN_WIDTH }]
+  const styleCell = [styles.cell, { height, width: CHART_COLUMN_WIDTH }]
   let styleDot
 
   if (shouldDrawDot) {
@@ -52,12 +52,12 @@ const styles = StyleSheet.create({
   cell: {
     backgroundColor: 'white',
     borderColor: Colors.greyLight,
-    borderWidth: GRID_LINE_HORIZONTAL_WIDTH,
+    borderWidth: CHART_GRID_LINE_HORIZONTAL_WIDTH,
     ...Containers.centerItems
   },
   dot: {
-    width: DOT_RADIUS * 2,
-    height: DOT_RADIUS * 2,
+    width: CHART_DOT_RADIUS * 2,
+    height: CHART_DOT_RADIUS * 2,
     borderRadius: 50
   }
 })

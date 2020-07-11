@@ -21,10 +21,10 @@ import { getChartFlag, scaleObservable, setChartFlag } from '../../local-storage
 import { makeColumnInfo, nfpLines } from '../helpers/chart'
 
 import {
-  COLUMN_WIDTH,
+  CHART_COLUMN_WIDTH,
   SYMPTOMS,
-  SYMPTOM_HEIGHT_RATIO,
-  XAXIS_HEIGHT_RATIO
+  CHART_SYMPTOM_HEIGHT_RATIO,
+  CHART_XAXIS_HEIGHT_RATIO
 } from '../../config'
 import { shared } from '../../i18n/en/labels'
 import { Colors, Spacing } from '../../styles/redesign'
@@ -97,8 +97,8 @@ class CycleChart extends Component {
 
   reCalculateChartInfo = (nativeEvent) => {
     const { height, width } = nativeEvent.layout
-    const xAxisCoefficient = XAXIS_HEIGHT_RATIO
-    const symptomCoefficient = SYMPTOM_HEIGHT_RATIO
+    const xAxisCoefficient = CHART_XAXIS_HEIGHT_RATIO
+    const symptomCoefficient = CHART_SYMPTOM_HEIGHT_RATIO
 
     this.xAxisHeight = height * xAxisCoefficient
     const remainingHeight = height - this.xAxisHeight
@@ -108,7 +108,7 @@ class CycleChart extends Component {
     this.columnHeight = remainingHeight - this.symptomRowHeight
     const chartHeight = this.shouldShowTemperatureColumn ?
       height : (this.symptomRowHeight + this.xAxisHeight)
-    const numberOfColumnsToRender = Math.round(width / COLUMN_WIDTH)
+    const numberOfColumnsToRender = Math.round(width / CHART_COLUMN_WIDTH)
     const columns = makeColumnInfo()
 
     this.setState({ columns, chartHeight, numberOfColumnsToRender })

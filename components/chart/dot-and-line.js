@@ -5,10 +5,10 @@ import { Path, Shape } from 'react-native/Libraries/ART/ReactNativeART'
 import { Colors } from '../../styles/redesign'
 
 import {
-  COLUMN_WIDTH,
-  COLUMN_MIDDLE,
-  DOT_RADIUS,
-  STROKE_WIDTH
+  CHART_COLUMN_WIDTH,
+  CHART_COLUMN_MIDDLE,
+  CHART_DOT_RADIUS,
+  CHART_STROKE_WIDTH
 } from '../../config'
 
 export default class DotAndLine extends Component {
@@ -40,20 +40,20 @@ export default class DotAndLine extends Component {
       const middleY = ((leftY - y) / 2) + y
       excludeLeftLine = leftTemperatureExclude || exclude
       lineLeft = new Path()
-        .moveTo(COLUMN_MIDDLE - DOT_RADIUS, y)
+        .moveTo(CHART_COLUMN_MIDDLE - CHART_DOT_RADIUS, y)
         .lineTo(0, middleY)
     }
     if (rightY) {
       const middleY = ((y - rightY) / 2) + rightY
       excludeRightLine = rightTemperatureExclude || exclude
       lineRight = new Path()
-        .moveTo(COLUMN_MIDDLE + DOT_RADIUS, y)
-        .lineTo(COLUMN_WIDTH, middleY)
+        .moveTo(CHART_COLUMN_MIDDLE + CHART_DOT_RADIUS, y)
+        .lineTo(CHART_COLUMN_WIDTH, middleY)
     }
 
-    const dot = new Path().moveTo(COLUMN_MIDDLE , y - DOT_RADIUS)
-      .arc(0, DOT_RADIUS * 2, DOT_RADIUS)
-      .arc(0, DOT_RADIUS * -2, DOT_RADIUS)
+    const dot = new Path().moveTo(CHART_COLUMN_MIDDLE , y - CHART_DOT_RADIUS)
+      .arc(0, CHART_DOT_RADIUS * 2, CHART_DOT_RADIUS)
+      .arc(0, CHART_DOT_RADIUS * -2, CHART_DOT_RADIUS)
     const dotColor = exclude ? Colors.tourquise : Colors.tourquiseDark
     const lineColorLeft = excludeLeftLine ?
       Colors.tourquise : Colors.tourquiseDark
@@ -65,16 +65,16 @@ export default class DotAndLine extends Component {
         <Shape
           d={lineLeft}
           stroke={lineColorLeft}
-          strokeWidth={STROKE_WIDTH}
+          strokeWidth={CHART_STROKE_WIDTH}
           key={y}
         />
         <Shape
           d={lineRight}
           stroke={lineColorRight}
-          strokeWidth={STROKE_WIDTH}
-          key={y + DOT_RADIUS}
+          strokeWidth={CHART_STROKE_WIDTH}
+          key={y + CHART_DOT_RADIUS}
         />
-        <Shape d={dot} stroke={dotColor} strokeWidth={STROKE_WIDTH} key='dot' />
+        <Shape d={dot} stroke={dotColor} strokeWidth={CHART_STROKE_WIDTH} key='dot' />
       </React.Fragment>
     )
   }

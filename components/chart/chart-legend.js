@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native'
 import AppText from '../common/app-text'
 
 import { Typography } from '../../styles/redesign'
-import { YAXIS_WIDTH } from '../../config'
+import { CHART_YAXIS_WIDTH } from '../../config'
 import { shared as labels } from '../../i18n/en/labels'
 
 const ChartLegend = ({ height }) => {
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'flex-end',
-    width: YAXIS_WIDTH
+    width: CHART_YAXIS_WIDTH
   },
   text: {
     ...Typography.label
