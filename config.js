@@ -12,6 +12,17 @@ export const SYMPTOMS = [
   'mood',
   'note'
 ]
+export const SYMTOMS_WITH_TEMPERATURE = [
+  'bleeding',
+  'temperature',
+  'mucus',
+  'cervix',
+  'sex',
+  'desire',
+  'pain',
+  'mood',
+  'note'
+]
 
 export const CHART_COLUMN_WIDTH = 32
 export const CHART_COLUMN_MIDDLE = CHART_COLUMN_WIDTH / 2
