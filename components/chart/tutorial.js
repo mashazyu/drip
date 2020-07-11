@@ -13,7 +13,7 @@ const image = require('../../assets/swipe.png')
 const Tutorial = ({ onClose }) => {
   return (
     <View style={styles.container}>
-      <Image resizeMode="contain" source={image} style={styles.image} />
+      <Image resizeMode='contain' source={image} style={styles.image} />
       <View style={styles.textContainer}>
         <AppText>{chart.tutorial}</AppText>
       </View>

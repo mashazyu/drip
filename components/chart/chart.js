@@ -43,14 +43,8 @@ class CycleChart extends Component {
     this.getFhmAndLtlInfo = nfpLines()
     this.shouldShowTemperatureColumn = false
 
-    this.checkChartFirstViewFlag()
+    this.checkShouldShowHint()
     this.prepareSymptomData()
-  }
-
-  checkChartFirstViewFlag = async () => {
-    const flag = await getChartFlag()
-    const isFirstChartView = flag === 'true' ? true : false
-    this.setState({ isFirstChartView })
   }
 
   componentWillUnmount() {
@@ -58,8 +52,19 @@ class CycleChart extends Component {
     this.removeObvListener()
   }
 
+  checkShouldShowHint = async () => {
+    const flag = await getChartFlag()
+    const shouldShowHint = flag === 'true' ? true : false
+    this.setState({ shouldShowHint })
+  }
+
+  setShouldShowHint = async () => {
+    await setChartFlag()
+    this.setState({ shouldShowHint: false })
+  }
+
   onLayout = ({ nativeEvent }) => {
-    if (this.state.chartHeight) return
+    if (this.state.chartHeight) return false
 
     this.reCalculateChartInfo(nativeEvent)
     this.updateListeners(this.reCalculateChartInfo)
@@ -97,12 +102,10 @@ class CycleChart extends Component {
 
   reCalculateChartInfo = (nativeEvent) => {
     const { height, width } = nativeEvent.layout
-    const xAxisCoefficient = CHART_XAXIS_HEIGHT_RATIO
-    const symptomCoefficient = CHART_SYMPTOM_HEIGHT_RATIO
 
-    this.xAxisHeight = height * xAxisCoefficient
+    this.xAxisHeight = height * CHART_XAXIS_HEIGHT_RATIO
     const remainingHeight = height - this.xAxisHeight
-    this.symptomHeight = remainingHeight * symptomCoefficient
+    this.symptomHeight = remainingHeight * CHART_SYMPTOM_HEIGHT_RATIO
     this.symptomRowHeight = this.symptomRowSymptoms.length *
       this.symptomHeight
     this.columnHeight = remainingHeight - this.symptomRowHeight
@@ -112,11 +115,6 @@ class CycleChart extends Component {
     const columns = makeColumnInfo()
 
     this.setState({ columns, chartHeight, numberOfColumnsToRender })
-  }
-
-  setChartFirstViewFlag = async () => {
-    await setChartFlag()
-    this.setState({ isFirstChartView: false })
   }
 
   updateListeners(dataUpdateHandler) {
@@ -139,10 +137,10 @@ class CycleChart extends Component {
     const {
       chartHeight,
       chartLoaded,
-      isFirstChartView,
+      shouldShowHint,
       numberOfColumnsToRender
     } = this.state
-    const shouldShowChart = this.chartSymptoms.length > 0 ? true : false
+    const hasDataToDisplay = this.chartSymptoms.length > 0
 
     return (
       <AppPage
@@ -150,13 +148,13 @@ class CycleChart extends Component {
         onLayout={this.onLayout}
         scrollViewStyle={styles.page}
       >
-        {!shouldShowChart && <NoData />}
-        {shouldShowChart && !chartHeight && !chartLoaded && <AppLoadingView />}
+        {!hasDataToDisplay && <NoData />}
+        {hasDataToDisplay && !chartHeight && !chartLoaded && <AppLoadingView />}
         <View style={styles.chartContainer}>
-          {isFirstChartView && chartLoaded &&
-            <Tutorial onClose={this.setChartFirstViewFlag} />
+          {shouldShowHint && chartLoaded &&
+            <Tutorial onClose={this.setShouldShowHint} />
           }
-          {shouldShowChart && chartLoaded &&
+          {hasDataToDisplay && chartLoaded &&
             !this.shouldShowTemperatureColumn &&
             <View style={styles.centerItem}>
               <AppText style={styles.warning}>
@@ -164,7 +162,7 @@ class CycleChart extends Component {
               </AppText>
             </View>
           }
-          {shouldShowChart && (
+          {hasDataToDisplay && (
             <View style={styles.chartArea}>
 
               {chartHeight && chartLoaded && (
