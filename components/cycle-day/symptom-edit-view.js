@@ -15,11 +15,11 @@ import Temperature from './temperature'
 
 import { connect } from 'react-redux'
 import { getDate } from '../../slices/date'
-import { blank, save, shouldShow,symtomPage } from '../helpers/cycle-day'
+import { blank, save, shouldShow, symtomPage } from '../helpers/cycle-day'
 
 import { shared as sharedLabels } from '../../i18n/en/labels'
 import info from '../../i18n/en/symptom-info'
-import { Containers, Fonts, Sizes } from '../../styles/redesign'
+import { Containers, Sizes } from '../../styles/redesign'
 
 class SymptomEditView extends Component {
 
@@ -57,7 +57,7 @@ class SymptomEditView extends Component {
   }
 
   onEditNote = (note) => {
-    let data = JSON.parse(JSON.stringify(this.state.data))
+    const data = JSON.parse(JSON.stringify(this.state.data))
     const { symptom } = this.props
 
     if (symptom === 'note') {
@@ -70,7 +70,7 @@ class SymptomEditView extends Component {
   }
 
   onExcludeToggle = () => {
-    let data = JSON.parse(JSON.stringify(this.state.data))
+    const data = JSON.parse(JSON.stringify(this.state.data))
     Object.assign(data, { exclude: !data.exclude })
 
     this.setState({ data })
@@ -91,7 +91,7 @@ class SymptomEditView extends Component {
   }
 
   onSaveTemperature = (value, field) => {
-    let data = JSON.parse(JSON.stringify(this.state.data))
+    const data = JSON.parse(JSON.stringify(this.state.data))
     const dataToSave = field === 'value'
       ? { [field]: Number(value) } : { [field]: value }
     Object.assign(data, { ...dataToSave })
@@ -100,7 +100,7 @@ class SymptomEditView extends Component {
   }
 
   onSelectBox = (key) => {
-    let data = JSON.parse(JSON.stringify(this.state.data))
+    const data = JSON.parse(JSON.stringify(this.state.data))
     if (key === "other") {
       Object.assign(data, {
         note: null,
@@ -114,14 +114,14 @@ class SymptomEditView extends Component {
   }
 
   onSelectBoxNote= (value) => {
-    let data = JSON.parse(JSON.stringify(this.state.data))
+    const data = JSON.parse(JSON.stringify(this.state.data))
     Object.assign(data, { note: value !== '' ? value : null })
 
     this.setState({ data })
   }
 
   onSelectTab = (group, value) => {
-    let data = JSON.parse(JSON.stringify(this.state.data))
+    const data = JSON.parse(JSON.stringify(this.state.data))
     Object.assign(data, { [group.key]: value })
 
     this.setState({ data })
@@ -175,7 +175,10 @@ class SymptomEditView extends Component {
           })
           }
           {shouldBoxGroup && symtomPage[symptom].selectBoxGroups.map(group => {
-            const isOtherSelected = data['other'] !== null
+            const isOtherSelected =
+              data['other'] !== null
+              && data['other'] !== false
+              && Object.keys(group.options).includes('other')
 
             return (
               <Segment key={group.key}>
