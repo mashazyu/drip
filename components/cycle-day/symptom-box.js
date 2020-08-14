@@ -43,7 +43,7 @@ class SymptomBox extends Component {
   render() {
     const { date, symptom, symptomData, symptomDataToDisplay } = this.props
     const { isSymptomEdited } = this.state
-    const isSymptomDisabled = (isDateInFuture(date) && symptom !== 'note') ? true : false
+    const isSymptomDisabled = isDateInFuture(date) && symptom !== 'note'
     const isExcluded = symptomData !== null ? symptomData.exclude : false
 
     const iconColor = isSymptomDisabled ? Colors.greyLight : Colors.grey
@@ -85,9 +85,10 @@ class SymptomBox extends Component {
             <AppText style={symptomNameStyle}>
               {symptomTitles[symptom].toLowerCase()}
             </AppText>
-            {symptomDataToDisplay && <AppText style={textStyle}>
-              {symptomDataToDisplay}
-            </AppText>
+            {symptomDataToDisplay &&
+              <AppText style={textStyle}>
+                {symptomDataToDisplay}
+              </AppText>
             }
           </View>
         </TouchableOpacity>

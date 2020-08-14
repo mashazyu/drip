@@ -56,21 +56,23 @@ class SymptomEditView extends Component {
     this.saveData()
   }
 
+  getParsedData = () => JSON.parse(JSON.stringify(this.state.data))
+
   onEditNote = (note) => {
-    const data = JSON.parse(JSON.stringify(this.state.data))
+    const data = this.getParsedData()
     const { symptom } = this.props
 
     if (symptom === 'note') {
       Object.assign(data, { value: note })
     } else {
-      Object.assign(data, { note })
+      data['note'] = note
     }
 
     this.setState({ data })
   }
 
   onExcludeToggle = () => {
-    const data = JSON.parse(JSON.stringify(this.state.data))
+    const data = this.getParsedData()
     Object.assign(data, { exclude: !data.exclude })
 
     this.setState({ data })
@@ -91,7 +93,7 @@ class SymptomEditView extends Component {
   }
 
   onSaveTemperature = (value, field) => {
-    const data = JSON.parse(JSON.stringify(this.state.data))
+    const data = this.getParsedData()
     const dataToSave = field === 'value'
       ? { [field]: Number(value) } : { [field]: value }
     Object.assign(data, { ...dataToSave })
@@ -100,7 +102,7 @@ class SymptomEditView extends Component {
   }
 
   onSelectBox = (key) => {
-    const data = JSON.parse(JSON.stringify(this.state.data))
+    const data = this.getParsedData()
     if (key === "other") {
       Object.assign(data, {
         note: null,
@@ -114,14 +116,14 @@ class SymptomEditView extends Component {
   }
 
   onSelectBoxNote= (value) => {
-    const data = JSON.parse(JSON.stringify(this.state.data))
+    const data = this.getParsedData()
     Object.assign(data, { note: value !== '' ? value : null })
 
     this.setState({ data })
   }
 
   onSelectTab = (group, value) => {
-    const data = JSON.parse(JSON.stringify(this.state.data))
+    const data = this.getParsedData()
     Object.assign(data, { [group.key]: value })
 
     this.setState({ data })

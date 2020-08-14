@@ -18,7 +18,7 @@ import { Colors, Containers, Spacing, Typography } from '../../styles/redesign'
 
 const SymptomPageTitle = ({
   date,
-  getSymptomDataForDay,
+  reloadSymptomData,
   setDate,
   subtitle,
   title
@@ -27,7 +27,7 @@ const SymptomPageTitle = ({
   const leftArrowColor = isYesterdayInFuture(date) ? Colors.grey : Colors.orange
   const navigate = (isForward) => {
     const nextDay = isForward ? nextDate(date) : prevDate(date)
-    getSymptomDataForDay(nextDay)
+    reloadSymptomData(nextDay)
     setDate(nextDay)
   }
 
@@ -49,7 +49,7 @@ const SymptomPageTitle = ({
 
 SymptomPageTitle.propTypes = {
   date: PropTypes.string.isRequired,
-  getSymptomDataForDay: PropTypes.func.isRequired,
+  reloadSymptomData: PropTypes.func.isRequired,
   setDate: PropTypes.func.isRequired,
   subtitle: PropTypes.string,
   title: PropTypes.string

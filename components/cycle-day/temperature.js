@@ -17,6 +17,10 @@ import { temperature as labels } from '../../i18n/en/cycle-day'
 
 import { Colors, Containers, Sizes, Spacing } from '../../styles/redesign'
 
+const formatTemperature = value => value === null
+  ? value
+  : Number.parseFloat(value).toFixed(2)
+
 class Temperature extends Component {
 
   static propTypes = {
@@ -32,13 +36,12 @@ class Temperature extends Component {
     const { value } = data
     const { shouldShowSuggestion, suggestedTemperature } =
       isPreviousTemperature(date)
-    const isTimePickerVisible = false
 
     this.state = {
-      isTimePickerVisible,
+      isTimePickerVisible: false,
       shouldShowSuggestion,
-      suggestedTemperature: Number.parseFloat(suggestedTemperature).toFixed(2),
-      value: value === null ? value : Number.parseFloat(value).toFixed(2)
+      suggestedTemperature: formatTemperature(suggestedTemperature),
+      value: formatTemperature(value)
     }
   }
 
@@ -73,7 +76,8 @@ class Temperature extends Component {
     const { time } = this.props.data
 
     const inputStyle = (shouldShowSuggestion && value === null)
-      ? { color: Colors.grey } : {color: Colors.greyDark}
+      ? { color: Colors.grey }
+      : {color: Colors.greyDark}
     const outOfRangeWarning = isTemperatureOutOfRange(value)
     let temperatureToShow = null
 
@@ -90,7 +94,7 @@ class Temperature extends Component {
           <View style={styles.container}>
             <AppTextInput
               value={temperatureToShow === null ? '' : temperatureToShow}
-              onChangeText={value => this.onChangeTemperature(value)}
+              onChangeText={this.onChangeTemperature}
               onEndEditing={this.setTemperature}
               keyboardType="numeric"
               maxLength={5}

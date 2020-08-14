@@ -17,7 +17,7 @@ import { getData } from '../helpers/cycle-day'
 
 import { general as labels} from '../../i18n/en/cycle-day'
 import { Spacing } from '../../styles/redesign'
-import { SYMTOMS_WITH_TEMPERATURE } from '../../config'
+import { SYMPTOMS } from '../../config'
 
 class CycleDayOverView extends Component {
 
@@ -50,12 +50,12 @@ class CycleDayOverView extends Component {
     return (
       <AppPage>
         <SymptomPageTitle
-          getSymptomDataForDay={this.updateCycleDay}
+          reloadSymptomData={this.updateCycleDay}
           subtitle={subtitle}
           title={dateToTitle(date)}
         />
         <View style={styles.container}>
-          {SYMTOMS_WITH_TEMPERATURE.map(symptom => {
+          {SYMPTOMS.map(symptom => {
             const symptomData = cycleDay && cycleDay[symptom]
               ? cycleDay[symptom] : null
 
