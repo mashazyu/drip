@@ -16,7 +16,6 @@ const settingsMenuItems = [
 ]
 
 export default class HamburgerMenu extends Component {
-
   constructor(props) {
     super(props)
 
@@ -24,20 +23,23 @@ export default class HamburgerMenu extends Component {
   }
 
   toggleMenu = () => {
-    this.setState({ shouldShowMenu: !this.state.shouldShowMenu})
+    this.setState({ shouldShowMenu: !this.state.shouldShowMenu })
   }
 
   render() {
     const { shouldShowMenu } = this.state
 
-    return(
+    return (
       <React.Fragment>
-        {!shouldShowMenu &&
-          <TouchableOpacity onPress={this.toggleMenu}>
-            <AppIcon name='dots-three-vertical' color={Colors.orange}/>
+        {!shouldShowMenu && (
+          <TouchableOpacity
+            onPress={this.toggleMenu}
+            hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+          >
+            <AppIcon name='dots-three-vertical' color={Colors.orange} />
           </TouchableOpacity>
-        }
-        {shouldShowMenu &&
+        )}
+        {shouldShowMenu && (
           <Modal
             animationType='fade'
             onRequestClose={this.toggleMenu}
@@ -47,29 +49,27 @@ export default class HamburgerMenu extends Component {
             <TouchableOpacity
               onPress={this.toggleMenu}
               style={styles.blackBackground}
-            >
-            </TouchableOpacity>
+            ></TouchableOpacity>
             <View style={styles.menu}>
               <TouchableOpacity
                 onPress={this.toggleMenu}
                 style={styles.iconContainer}
               >
-                <AppIcon name='cross' color='black'/>
+                <AppIcon name='cross' color='black' />
               </TouchableOpacity>
-              {settingsMenuItems.map(item =>
+              {settingsMenuItems.map((item) => (
                 <MenuItem
                   item={item}
                   key={item.name}
                   closeMenu={this.toggleMenu}
                 />
-              )}
+              ))}
             </View>
           </Modal>
-        }
+        )}
       </React.Fragment>
     )
   }
-
 }
 
 const styles = StyleSheet.create({
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     alignSelf: 'flex-end',
-    marginBottom: Sizes.base
+    marginBottom: Sizes.base,
   },
   menu: {
     alignSelf: 'flex-end',
@@ -88,6 +88,6 @@ const styles = StyleSheet.create({
     height: '100%',
     padding: Sizes.base,
     position: 'absolute',
-    width: '60%'
-  }
+    width: '60%',
+  },
 })
